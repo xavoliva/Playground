@@ -2,13 +2,17 @@
 
 exampleList = ["elvis", "restful", "fluster", "lives", "whatever", "some", "other", "veils", "elvis"]
 
+# Charge list into a dictionary, where keys are words in lowercase
+# and values are the words sorted alphabetically
 def charge_List(word_List):
     word_dict = {}
     for word in word_List:
-        word_dict[word] = "".join(sorted(word))
+        word_dict[word.lower()] = "".join(sorted(word)).lower()
 
     return word_dict
 
+
+# Find all keys (words) with the same value
 def find_Anagrams(word, word_dict):
 
     if word in word_dict:
@@ -19,6 +23,7 @@ def find_Anagrams(word, word_dict):
             if word_dict[key] == sortedWord:
                 resultList.append(key)
 
+        # Remove actual word, since it is not considered anagram of himself
         resultList.remove(word)
         return resultList
 
@@ -38,10 +43,9 @@ def main():
 
     while True:
         
-        input_Word = input("Enter word: ")
+        input_Word = input("Enter word: ").lower()
         if not input_Word:
             break
-        print(input_Word)
         print(find_Anagrams(input_Word, word_dict))
     
 
