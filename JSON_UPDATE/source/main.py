@@ -1,6 +1,5 @@
 import json
 import collections.abc
-import pdb
 
 
 CONFIG_FILE = "configurationFile.json"
@@ -58,7 +57,6 @@ def changesParser(changesFile):
 
 
 def updateDictIteration(oldDict, changes):
-    pdb.set_trace()
     stack = [(oldDict,changes)]
     
     while stack:
