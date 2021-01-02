@@ -1,98 +1,88 @@
 import json
-import collections.abc
+from collections.abc import Mapping
 
 
-CONFIG_FILE = "configurationFile.json"
+CONFIG_FILE = "config_file.json"
 CHANGES_FILE = "changes.txt"
 
 
 '''
-FUNCTION DEFINITION : Function that modifies values in the configuration file
+Function that modifies values in the configuration file
 on position specified by (.txt) file containing changes.
 First parameter: configuration file
 Second parameter: txt file containing list of changes to be applied
-The resulting json is written into json file called resultConfiguration_v3.json
+The resulting json is written into json file called updated_config_file.json
 '''
-def updateJsonFile(configFile, changesFile):
 
-    changesDict = changesParser(changesFile)
 
-    with open(configFile, "r") as readConfigFile:
-        configData = json.load(readConfigFile)
+def update_json_file(configFile, changesFile):
 
-    updateDictIteration(configData,changesDict)
-        
+    changes_dict = changes_parser(changesFile)
 
-    with open("resultConfiguration_v3.json", "w") as outfile:
-        json.dump(configData, outfile, indent="   ")
+    with open(configFile, "r") as read_config_file:
+        config_data = json.load(read_config_file)
+
+    update_dict_iteration(config_data, changes_dict)
+
+    with open("updated_config_file.json", "w") as outfile:
+        json.dump(config_data, outfile, indent=" " * 3)
 
     return 1
 
 
-
 # Function allowing to put changes of txt file into a dictionary
 
-def changesParser(changesFile):
-    with open(changesFile, "r") as readChangesFile:
-        content = readChangesFile.readlines()
+def changes_parser(changesFile):
+    with open(changesFile, "r") as read_changes_file:
+        content = read_changes_file.readlines()
 
     content = [x.strip() for x in content]
-    
-    finalDict = {}
+
+    final_dict = {}
     for line in content:
-        tempDictionary = current = {}
-        left, right = line.split(": ",1)
-        leftList = left.replace("\"", "").split(".")
-        for element in leftList[:-1]:
+        temp_dict = current = {}
+        left, right = line.split(": ", 1)
+        left_list = left.replace("\"", "").split(".")
+        for element in left_list[:-1]:
             current[element] = {}
             current = current[element]
 
-        current[leftList[-1]] = json.loads(right)
-        current = current[leftList[-1]]
-        
-        updateDictIteration(finalDict, tempDictionary)
+        current[left_list[-1]] = json.loads(right)
+        current = current[left_list[-1]]
 
-    return finalDict
+        update_dict_iteration(final_dict, temp_dict)
+
+    return final_dict
 
 
+def update_dict_iteration(old_dict, changes):
+    stack = [(old_dict, changes)]
 
-def updateDictIteration(oldDict, changes):
-    stack = [(oldDict,changes)]
-    
     while stack:
-      oldDict,changes = stack.pop()
-      for x,y in changes.items():
-         if isinstance(y, collections.abc.Mapping):
-            tempDict = oldDict.setdefault(x, {})
+        old_dict, changes = stack.pop()
+        for x, y in changes.items():
+            if isinstance(y, Mapping):
+                temp_dict = old_dict.setdefault(x, {})
 
-            if isinstance(tempDict, collections.abc.Mapping):
-               stack.append((tempDict, y))
-               
+                if isinstance(temp_dict, Mapping):
+                    stack.append((temp_dict, y))
+
+                else:
+                    old_dict[x] = y
+
             else:
-               oldDict[x] = y
-            
-         else:
-            oldDict[x] = y
+                old_dict[x] = y
 
 
-def updateDictRecursion(oldDict, changes):
+def update_dict_recursive(old_dict, changes):
     for x, y in changes.items():
-        if isinstance(y, collections.abc.Mapping):
-            oldDict[x] = updateDictRecursion(oldDict.get(x, {}), y)
+        if isinstance(y, Mapping):
+            old_dict[x] = update_dict_recursive(old_dict.get(x, {}), y)
         else:
-            oldDict[x] = y
-     
-    return oldDict
+            old_dict[x] = y
 
+    return old_dict
 
-
-
-    
-
-
-def main():
-    updateJsonFile(CONFIG_FILE, CHANGES_FILE)
 
 if __name__ == "__main__":
-    main()
-
+    update_json_file(CONFIG_FILE, CHANGES_FILE)

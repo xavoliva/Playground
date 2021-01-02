@@ -1,10 +1,12 @@
+example_list = ["elvis", "restful", "fluster", "lives",
+                "whatever", "some", "other", "veils", "elvis"]
 
 
-exampleList = ["elvis", "restful", "fluster", "lives", "whatever", "some", "other", "veils", "elvis"]
-
-# Charge list into a dictionary, where keys are words in lowercase
-# and values are the words sorted alphabetically
-def charge_List(word_List):
+def charge_list(word_List):
+    """
+    Charge list into a dictionary, where keys are words in lowercase
+    and values are the words sorted alphabetically
+    """
     word_dict = {}
     for word in word_List:
         word_dict[word.lower()] = "".join(sorted(word)).lower()
@@ -12,42 +14,40 @@ def charge_List(word_List):
     return word_dict
 
 
-# Find all keys (words) with the same value
-def find_Anagrams(word, word_dict):
+def find_anagrams(word, word_dict):
+    """
+    Find all keys (words) with the same value
+    """
 
     if word in word_dict:
-        sortedWord = "".join(sorted(word))
-        resultList = []
+        sorted_word = "".join(sorted(word))
+        result_list = []
 
         for key in word_dict:
-            if word_dict[key] == sortedWord:
-                resultList.append(key)
+            if word_dict[key] == sorted_word:
+                result_list.append(key)
 
-        # Remove actual word, since it is not considered anagram of himself
-        resultList.remove(word)
-        return resultList
+        # remove actual word, since it is not considered anagram of himself
+        result_list.remove(word)
+        return result_list
 
-
-    else:
-        return []
+    return []
 
 
 def main():
 
-
-    word_dict = charge_List(exampleList)
+    word_dict = charge_list(example_list)
     print("List successfully charged")
     print("Type enter key to finish program.")
     print("")
-    input_Word = "..."
+    input_word = "..."
 
     while True:
-        
-        input_Word = input("Enter word: ").lower()
-        if not input_Word:
+        input_word = input("Enter word: ").lower()
+        if not input_word:
             break
-        print(find_Anagrams(input_Word, word_dict))
-    
+        print(find_anagrams(input_word, word_dict))
+
 
 if __name__ == "__main__":
     main()

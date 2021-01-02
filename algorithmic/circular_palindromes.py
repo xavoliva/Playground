@@ -1,10 +1,4 @@
-
-#!/bin/python3
-
-
-#
-# Complete the circularPalindromes function below.
-#
+# !/bin/python3
 
 def k_length_rotation(s: str):
     for n in range(len(s)):
@@ -31,7 +25,7 @@ def longest_palindrome(s: str):
     return max_pal_length
 
 
-def circularPalindromes(s):
+def circular_palindromes(s):
     result = []
 
     for s_k in k_length_rotation(s):
@@ -43,6 +37,6 @@ def circularPalindromes(s):
 if __name__ == '__main__':
     s = "aaaaabbbbaaaa"
 
-    result = circularPalindromes(s)
+    result = circular_palindromes(s)
 
     print('\n'.join(map(str, result)))
